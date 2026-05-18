@@ -1455,6 +1455,7 @@ static struct iommu_device *arm_smmu_probe_device(struct device *dev)
 
 	/* FUCK FT2000+ */
 	if ((read_cpuid_id() & 0xff000fff0) == 0X70006620 /* phytium 0x70 FT2000+ 0x662 */) {
+        pr_info("fuck phytium FT2000+ SMMU");
 		int num = fwspec->num_ids;
 
 		for (i = 0; i < num; i++) {
