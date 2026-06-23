@@ -1454,8 +1454,7 @@ static struct iommu_device *arm_smmu_probe_device(struct device *dev)
 	}
 
 	/* FUCK FT2000+ */
-	if ((read_cpuid_id() & 0xff000fff0) == 0X70006620 /* phytium 0x70 FT2000+ 0x662 */) {
-        pr_info("fuck phytium FT2000+ SMMU");
+	if (midr_is_cpu_model_range(read_cpuid_id(), MIDR_PHYTIUM_PS17064, 0, (MIDR_REVISION_MASK | MIDR_VARIANT_MASK))) {
 		int num = fwspec->num_ids;
 
 		for (i = 0; i < num; i++) {
@@ -1561,7 +1560,7 @@ static struct iommu_group *arm_smmu_device_group(struct device *dev)
 		}
 
 		if (
-			(read_cpuid_id() & 0xff000fff0) == 0X70006620 /* phytium 0x70 FT2000+ 0x662 */ &&
+			midr_is_cpu_model_range(read_cpuid_id(), MIDR_PHYTIUM_PS17064, 0, (MIDR_REVISION_MASK | MIDR_VARIANT_MASK)) &&
 			!smmu->s2crs[idx].group
 		) {
 			continue;

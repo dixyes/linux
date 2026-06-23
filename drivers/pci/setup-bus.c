@@ -1378,11 +1378,11 @@ static void pbus_size_mem(struct pci_bus *bus, struct resource *b_res,
 		PCI_FUNC(bus->self->devfn) == 0x00
 		//(b_res->flags & IORESOURCE_PREFETCH)
 	) {
+	    //pci_info(bus->self, "extend size0: 0x%016llx size1: 0x%016llx\n", size0, size1);
 		// fuck extend
 		size0 = 0x1 << 27; // 128M
 		min_align = 0x1 << 27;
 	}
-	// pci_info(bus->self, "size0: 0x%016llx size1: 0x%016llx\n", size0, size1);
 	resource_set_range(b_res, min_align, size0);
 	b_res->flags |= IORESOURCE_STARTALIGN;
 	if (bus->self && realloc_head && (size1 > size0 || add_align > min_align)) {
