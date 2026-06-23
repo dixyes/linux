@@ -1816,6 +1816,12 @@ static void its_irq_compose_msi_msg(struct irq_data *d, struct msi_msg *msg)
 	struct its_device *its_dev = irq_data_get_irq_chip_data(d);
 
 	msg->data = its_get_event_id(d);
+	if ((read_cpuid_id() & 0xff000fff0) == 0X70006620 /* phytium 0x70 FT2000+ 0x662 */) {
+		u64 addr = its_dev->its->get_msi_base(its_dev);
+		msg->address_lo = lower_32_bits(addr);
+		msg->address_hi = upper_32_bits(addr);
+		return;
+	}
 	msi_msg_set_addr(irq_data_get_msi_desc(d), msg,
 			 its_dev->its->get_msi_base(its_dev));
 }

@@ -1560,6 +1560,13 @@ static struct iommu_group *arm_smmu_device_group(struct device *dev)
 			return ERR_PTR(-EINVAL);
 		}
 
+		if (
+			(read_cpuid_id() & 0xff000fff0) == 0X70006620 /* phytium 0x70 FT2000+ 0x662 */ &&
+			!smmu->s2crs[idx].group
+		) {
+			continue;
+		}
+
 		group = smmu->s2crs[idx].group;
 	}
 
